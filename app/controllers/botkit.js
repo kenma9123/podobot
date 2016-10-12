@@ -54,6 +54,27 @@ controller.hears(['more test'], 'message_received', function(bot, message) {
 //   bot.replyWithTyping(message, 'you said ' + message.match[1]);
 // });
 
+controller.hears(['shutdown'], 'message_received', function(bot, message) {
+
+  bot.startConversation(message, function(err, convo) {
+
+    convo.ask('Are you sure you want me to shutdown?', [{
+      pattern: bot.utterances.yes,
+      callback: function(response, convo) {
+        convo.say('Bye!');
+        convo.next();
+      }
+    }, {
+      pattern: bot.utterances.no,
+      default: true,
+      callback: function(response, convo) {
+        convo.say('*Phew!*');
+        convo.next();
+      }
+    }]);
+  });
+});
+
 // check user submission
 controller.hears(['check', 'submissions'], 'message_received', function(bot, message) {
   // start a conversation to handle this response.
@@ -65,28 +86,28 @@ controller.hears(['check', 'submissions'], 'message_received', function(bot, mes
       convo.say('Cool, I\'ll be back in sec, I will check your form with ID: ' + formID);
 
       // setTimeout(function() {
-        convo.say('Here\'s the submissions of your form.');
-        convo.say('Form ID: '+formID+' and Submission as of 10/12/2016');
-        convo.next();
-        // convo.ask('Anything else?', [{
-        //   pattern: bot.utterances.no,
-        //   callback: function(response,c) {
-        //     c.say('OK see you next time!');
-        //     convo.next();
-        //   }
-        // }, {
-        //   pattern: bot.utterances.yes,
-        //   callback: function(response,c) {
-        //     c.say('Great! ask away...');
-        //     convo.next();
-        //   }
-        // }, {
-        //   default: true,
-        //   callback: function(response,c) {
-        //     c.say('OK I think that\'s a NO, see yah!');
-        //     convo.next();
-        //   }
-        // }]);
+      convo.say('Here\'s the submissions of your form.');
+      convo.say('Form ID: ' + formID + ' and Submission as of 10/12/2016');
+      convo.next();
+      // convo.ask('Anything else?', [{
+      //   pattern: bot.utterances.no,
+      //   callback: function(response,c) {
+      //     c.say('OK see you next time!');
+      //     convo.next();
+      //   }
+      // }, {
+      //   pattern: bot.utterances.yes,
+      //   callback: function(response,c) {
+      //     c.say('Great! ask away...');
+      //     convo.next();
+      //   }
+      // }, {
+      //   default: true,
+      //   callback: function(response,c) {
+      //     c.say('OK I think that\'s a NO, see yah!');
+      //     convo.next();
+      //   }
+      // }]);
       // }, 3000);
     });
   });
