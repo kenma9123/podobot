@@ -63,34 +63,33 @@ controller.hears(['check', 'submissions'], 'message_received', function(bot, mes
     convo.ask('May I know the form ID?', function(response, convo) {
       var formID = response.text;
       convo.say('Cool, I\'ll be back in sec, I will check your form with ID: ' + formID);
-      // convo.next();
 
       setTimeout(function() {
         convo.say('Here\'s the submissions of your form.');
         convo.say('Form ID: '+formID+' and Submission as of 10/12/2016');
-
-        convo.ask('Anything else?', [{
-          pattern: bot.utterances.no,
-          callback: function(response,convo) {
-            convo.say('OK see you next time!');
-            convo.next();
-          }
-        }, {
-          pattern: bot.utterances.yes,
-          callback: function(response,convo) {
-            convo.say('Great! ask away...');
-            // do something else...
-            convo.next();
-          }
-        }, {
-          default: true,
-          callback: function(response,convo) {
-            // just repeat the question
-            convo.say('OK I think that\'s a NO, see yah!');
-            convo.next();
-          }
-        }]);
-      }, 5000);
+        convo.next();
+        // convo.ask('Anything else?', [{
+        //   pattern: bot.utterances.no,
+        //   callback: function(response,convo) {
+        //     convo.say('OK see you next time!');
+        //     convo.next();
+        //   }
+        // }, {
+        //   pattern: bot.utterances.yes,
+        //   callback: function(response,convo) {
+        //     convo.say('Great! ask away...');
+        //     // do something else...
+        //     convo.next();
+        //   }
+        // }, {
+        //   default: true,
+        //   callback: function(response,convo) {
+        //     // just repeat the question
+        //     convo.say('OK I think that\'s a NO, see yah!');
+        //     convo.next();
+        //   }
+        // }]);
+      }, 3000);
     });
   });
 });
