@@ -64,7 +64,7 @@ controller.hears(['check', 'submissions'], 'message_received', function(bot, mes
       var formID = response.text;
       convo.say('Cool, I\'ll be back in sec, I will check your form with ID: ' + formID);
 
-      setTimeout(function() {
+      // setTimeout(function() {
         convo.say('Here\'s the submissions of your form.');
         convo.say('Form ID: '+formID+' and Submission as of 10/12/2016');
         // convo.next();
@@ -87,7 +87,7 @@ controller.hears(['check', 'submissions'], 'message_received', function(bot, mes
             convo.next();
           }
         }]);
-      }, 3000);
+      // }, 3000);
     });
   });
 });
