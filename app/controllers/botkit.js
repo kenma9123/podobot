@@ -63,7 +63,7 @@ controller.hears(['check', 'submissions'], 'message_received', function(bot, mes
     convo.ask('May I know the form ID?', function(response, convo) {
       var formID = response.text;
       convo.say('Cool, I\'ll be back in sec, I will check your form with ID: ' + formID);
-      convo.next();
+      // convo.next();
 
       setTimeout(function() {
         convo.say('Here\'s the submissions of your form.');
