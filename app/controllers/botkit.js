@@ -66,7 +66,7 @@ controller.hears(['check', 'submissions'], 'message_received', function(bot, mes
       convo.next();
 
       setTimeout(function() {
-        bot.replyWithTyping(message, 'Here\'s the submissions of your form.');
+        convo.say(message, 'Here\'s the submissions of your form.');
         convo.say('Form ID: '+formID+' and Submission as of 10/12/2016');
 
         convo.ask('Anything else?', [{
