@@ -41,10 +41,10 @@ controller.hears(['hello'], 'message_received', function(bot, message) {
   bot.replyWithTyping(message, 'Hey there, how\'s your day?');
 });
 
-// user says anything else
-controller.hears('(.*)', 'message_received', function(bot, message) {
-  bot.replyWithTyping(message, 'you said ' + message.match[1]);
-});
+// // user says anything else
+// controller.hears('(.*)', 'message_received', function(bot, message) {
+//   bot.replyWithTyping(message, 'you said ' + message.match[1]);
+// });
 
 // check user submission
 controller.hears(['check', 'submissions'], 'message_received', function(bot, message) {
