@@ -49,7 +49,7 @@ controller.hears(['hello'], 'message_received', function(bot, message) {
 // check user submission
 controller.hears(['check', 'submissions'], 'message_received', function(bot, message) {
   // start a conversation to handle this response.
-  bot.startConversation(message, function(err, convo) {
+  bot.createConversation(message, function(err, convo) {
 
     convo.say('Okay I will check your form submissions.');
     convo.ask('May I know the form ID?',function(response, convo) {
