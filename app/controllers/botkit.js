@@ -56,48 +56,39 @@ controller.hears(['more test'], 'message_received', function(bot, message) {
 
 // check user submission
 controller.hears(['check', 'submissions'], 'message_received', function(bot, message) {
-  bot.createConversation(message, function(err, convo) {
+  // start a conversation to handle this response.
+  bot.startConversation(message, function(err, convo) {
 
-      // create a path for when a user says YES
-      convo.addMessage({
-              text: 'You said yes! How wonderful.',
-      },'yes_thread');
+    convo.say('Okay I will check your form submissions.');
+    convo.ask('May I know the form ID?', function(response, convo) {
+      var formID = response.text;
+      convo.say('Cool, I\'ll be back in sec, I will check your form with ID: ' + formID);
 
-      // create a path for when a user says NO
-      convo.addMessage({
-          text: 'You said no, that is too bad.',
-      },'no_thread');
-
-      // create a path where neither option was matched
-      // this message has an action field, which directs botkit to go back to the `default` thread after sending this message.
-      convo.addMessage({
-          text: 'Sorry I did not understand.',
-          action: 'default',
-      },'bad_response');
-
-      // Create a yes/no question in the default thread...
-      convo.ask('Do you like cheese?', [
-          {
-              pattern: 'yes',
-              callback: function(response, convo) {
-                  convo.changeTopic('yes_thread');
-              },
-          },
-          {
-              pattern: 'no',
-              callback: function(response, convo) {
-                  convo.changeTopic('no_thread');
-              },
-          },
-          {
-              default: true,
-              callback: function(response, convo) {
-                  convo.changeTopic('bad_response');
-              },
-          }
-      ]);
-
-      convo.activate();
+      // setTimeout(function() {
+        convo.say('Here\'s the submissions of your form.');
+        convo.say('Form ID: '+formID+' and Submission as of 10/12/2016');
+        convo.next();
+        // convo.ask('Anything else?', [{
+        //   pattern: bot.utterances.no,
+        //   callback: function(response,c) {
+        //     c.say('OK see you next time!');
+        //     convo.next();
+        //   }
+        // }, {
+        //   pattern: bot.utterances.yes,
+        //   callback: function(response,c) {
+        //     c.say('Great! ask away...');
+        //     convo.next();
+        //   }
+        // }, {
+        //   default: true,
+        //   callback: function(response,c) {
+        //     c.say('OK I think that\'s a NO, see yah!');
+        //     convo.next();
+        //   }
+        // }]);
+      // }, 3000);
+    });
   });
 });
 
