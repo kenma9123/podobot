@@ -49,17 +49,16 @@ controller.hears(['hello'], 'message_received', function(bot, message) {
 // check user submission
 controller.hears(['check', 'submissions'], 'message_received', function(bot, message) {
   // start a conversation to handle this response.
-  bot.createConversation(message, function(err, convo) {
+  bot.startConversation(message, function(err, convo) {
 
     convo.say('Okay I will check your form submissions.');
-    convo.ask('May I know the form ID?',function(response, convo) {
-
-      convo.setVar('formID', response.text);
+    convo.ask('May I know the form ID?', function(response, convo) {
+      var formID = response.text;
       convo.say('Cool, I\'ll be back in sec.');
 
       setTimeout(function() {
-        convo.replyWithTyping(message, 'Here\'s the submissions of your form.');
-        convo.say('Form ID: {{formID}} and Submission as of 10/12/2016');
+        // convo.replyWithTyping(message, 'Here\'s the submissions of your form.');
+        convo.say('Form ID: '+formID+' and Submission as of 10/12/2016');
 
         convo.ask('Anything else?', [
           {
@@ -88,8 +87,6 @@ controller.hears(['check', 'submissions'], 'message_received', function(bot, mes
         ]);
       }, 3000);
     });
-
-    convo.activate();
   });
 });
 
