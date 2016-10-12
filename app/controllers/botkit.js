@@ -38,16 +38,6 @@ controller.on('facebook_optin', function(bot, message) {
 
 // user said hello
 controller.hears(['hello'], 'message_received', function(bot, message) {
-  bot.startTyping(message, function () {
-    // do something here, the "is typing" animation is visible
-  });
-
-  setTimeout(function() {
-    bot.stopTyping(message, function () {
-      // do something here, the "is typing" animation is not visible
-    });
-  }, 2000);
-
   bot.replyWithTyping(message, 'Hey there, how\'s your day?');
 });
 
@@ -75,32 +65,32 @@ controller.hears(['check', 'submissions'], 'message_received', function(bot, mes
       convo.say('Cool, I\'ll be back in sec, I will check your form with ID: ' + formID);
       convo.next();
 
-      // setTimeout(function() {
-      //   // convo.replyWithTyping(message, 'Here\'s the submissions of your form.');
-      //   convo.say('Form ID: '+formID+' and Submission as of 10/12/2016');
+      setTimeout(function() {
+        bot.replyWithTyping(message, 'Here\'s the submissions of your form.');
+        convo.say('Form ID: '+formID+' and Submission as of 10/12/2016');
 
-      //   convo.ask('Anything else?', [{
-      //     pattern: bot.utterances.no,
-      //     callback: function(response,convo) {
-      //       convo.say('OK see you next time!');
-      //       convo.next();
-      //     }
-      //   }, {
-      //     pattern: bot.utterances.yes,
-      //     callback: function(response,convo) {
-      //       convo.say('Great! ask away...');
-      //       // do something else...
-      //       convo.next();
-      //     }
-      //   }, {
-      //     default: true,
-      //     callback: function(response,convo) {
-      //       // just repeat the question
-      //       convo.say('OK I think that\'s a NO, see yah!');
-      //       convo.next();
-      //     }
-      //   }]);
-      // }, 3000);
+        convo.ask('Anything else?', [{
+          pattern: bot.utterances.no,
+          callback: function(response,convo) {
+            convo.say('OK see you next time!');
+            convo.next();
+          }
+        }, {
+          pattern: bot.utterances.yes,
+          callback: function(response,convo) {
+            convo.say('Great! ask away...');
+            // do something else...
+            convo.next();
+          }
+        }, {
+          default: true,
+          callback: function(response,convo) {
+            // just repeat the question
+            convo.say('OK I think that\'s a NO, see yah!');
+            convo.next();
+          }
+        }]);
+      }, 3000);
     });
   });
 });
