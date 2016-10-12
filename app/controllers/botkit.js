@@ -55,6 +55,10 @@ controller.hears(['test'], 'message_received', function(bot, message) {
   bot.reply('This is a test');
 });
 
+controller.hears(['more test'], 'message_received', function(bot, message) {
+  bot.reply('This is a more test');
+});
+
 // // user says anything else
 // controller.hears('(.*)', 'message_received', function(bot, message) {
 //   bot.replyWithTyping(message, 'you said ' + message.match[1]);
