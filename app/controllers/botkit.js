@@ -27,7 +27,7 @@ request.post('https://graph.facebook.com/me/subscribed_apps?access_token=' + pro
       controller.startTicking();
     }
   }
-)
+);
 
 console.log('botkit');
 
@@ -38,17 +38,64 @@ controller.on('facebook_optin', function(bot, message) {
 
 // user said hello
 controller.hears(['hello'], 'message_received', function(bot, message) {
-  bot.reply(message, 'Hey there, how\'s your day?');
+  bot.replyWithTyping(message, 'Hey there, how\'s your day?');
 });
 
 // user says anything else
 controller.hears('(.*)', 'message_received', function(bot, message) {
-  bot.reply(message, 'you said ' + message.match[1]);
+  bot.replyWithTyping(message, 'you said ' + message.match[1]);
+});
+
+// check user submission
+controller.hears(['check', 'submissions'], 'message_received', function(bot, message) {
+  // start a conversation to handle this response.
+  bot.startConversation(message, function(err, convo) {
+
+    convo.say('Okay I will check your form submissions.');
+    convo.ask('May I know the form ID?',function(response, convo) {
+
+      convo.setVar('formID', response.text);
+      convo.say('Cool, I\'ll be back in sec.');
+
+      setTimeout(function() {
+        bot.replyWithTyping(message, 'Here\'s the submissions of your form.');
+        convo.say('Form ID: {{formID}} and Submission as of 10/12/2016');
+
+        convo.ask('Anything else?', [
+          {
+            pattern: bot.utterances.no,
+            callback: function(response,convo) {
+              convo.say('OK see you next time!');
+              convo.next();
+            }
+          },
+          {
+            pattern: bot.utterances.yes,
+            callback: function(response,convo) {
+              convo.say('Great! ask away...');
+              // do something else...
+              convo.next();
+            }
+          },
+          {
+            default: true,
+            callback: function(response,convo) {
+              // just repeat the question
+              convo.say('OK I think that\'s a NO, see yah!');
+              convo.next();
+            }
+          }
+        ]);
+      }, 3000);
+    });
+
+    convo.activate();
+  });
 });
 
 // this function processes the POST request to the webhook
 var handler = function(obj) {
-  controller.debug('GOT A MESSAGE HOOK');
+  controller.debug('GOT A MESSAGE HOOK from facebook');
   var message;
 
   // if we receive a message
@@ -72,8 +119,9 @@ var handler = function(obj) {
           };
 
           // save if user comes from m.me adress or Facebook search
-          create_user_if_new(facebook_message.sender.id, facebook_message.timestamp);
+          createUserIfNew(facebook_message.sender.id, facebook_message.timestamp);
 
+          // notify bot we receive a message
           controller.receiveMessage(bot, message);
         }
         // clicks on a postback action in an attachment
@@ -109,8 +157,9 @@ var handler = function(obj) {
           };
 
           // save if user comes from "Send to Messenger"
-          create_user_if_new(facebook_message.sender.id, facebook_message.timestamp);
+          createUserIfNew(facebook_message.sender.id, facebook_message.timestamp);
 
+          // user just clicked the send message
           controller.trigger('facebook_optin', [bot, message]);
         }
         // message delivered callback
@@ -122,8 +171,10 @@ var handler = function(obj) {
             timestamp: facebook_message.timestamp
           };
 
+          // message has been delivered
           controller.trigger('message_delivered', [bot, message]);
         } else {
+          // we dont understand the following fb hook
           controller.log('Got an unexpected message from Facebook: ', facebook_message);
         }
       }
@@ -131,7 +182,7 @@ var handler = function(obj) {
   }
 }
 
-var create_user_if_new = function(id, ts) {
+var createUserIfNew = function(id, ts) {
   controller.storage.users.get(id, function(err, user) {
     if (err) {
       console.log(err);

@@ -11,6 +11,7 @@ module.exports = function(app) {
     }
   });
 
+  // listen to facebook webhook
   app.post('/', function(req, res) {
     facebook_handler(req.body);
 
